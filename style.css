@@ -1,0 +1,138 @@
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;500&display=swap');
+*{
+    box-sizing: border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family: "rubik";
+    background-color: #F5F6FA;
+}
+
+.main-container{
+    margin: 32px 16px 16px;
+}
+
+.message-section{
+    background-color: #FFFFFF;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 16px;
+    border-radius: 8px;
+}
+
+.message-header{
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.picture-styles{
+    height: 32px;
+    width: 32px;
+}
+
+.Name-styles{
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 19px;
+    letter-spacing: 0px;
+    color:#334253;
+}
+
+.text-style{
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+    max-width: 311px;
+    text-align: left;
+    color:#67727E;
+}
+
+.message-footer{
+    display: flex;
+    align-items: center;
+    gap: 145px;
+}
+
+.plus-minus-style{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    gap: 13px;
+    width: 100px;
+    height: 40px;
+    background-color: #F5F6FA;
+    color: #5357B6;
+    font-weight: 500;
+    border-radius: 10px;
+}
+
+.reply-section{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color:#5357B6;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+    cursor: pointer;
+}
+
+.reply-img-style{
+    padding-top:3px;
+}
+
+/* delete div style */
+
+.delete-section-style{
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 24px 28px;
+    background-color: #FFFFFF;
+}
+
+.delete-text-style{
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 24px;
+    letter-spacing: 0px;
+    text-align: left;
+    color:#334253;
+}
+
+.buttons-section{
+    display: flex;
+    gap: 12px;
+}
+
+.cancel-button{
+    font-family: "rubik";
+    background: #67727E;
+    border-radius: 8px;
+    height: 48px;
+    width: 138px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+    color:#FFFFFF;
+    border:none;
+}
+
+.delete-button{
+    font-family: "rubik";
+    background: #ED6368;
+    border-radius: 8px;
+    height: 48px;
+    width: 138px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+    color:#FFFFFF;
+    border:none;
+}
