@@ -12,6 +12,10 @@ body{
 
 .main-container{
     margin: 32px 16px 16px;
+    flex-direction: column;
+    align-items: center;
+    display: flex;
+    gap:16px;
 }
 
 .message-section{
@@ -70,6 +74,10 @@ body{
     border-radius: 10px;
 }
 
+.plus-minus-icons{
+    cursor: pointer;
+}
+
 .reply-section{
     display: flex;
     align-items: center;
@@ -93,6 +101,9 @@ body{
     gap: 16px;
     padding: 24px 28px;
     background-color: #FFFFFF;
+    position: absolute;
+    top: 33%;
+    display: none;
 }
 
 .delete-text-style{
@@ -102,6 +113,10 @@ body{
     letter-spacing: 0px;
     text-align: left;
     color:#334253;
+}
+
+.description{
+    max-width:288px;
 }
 
 .buttons-section{
@@ -121,6 +136,7 @@ body{
     line-height: 24px;
     color:#FFFFFF;
     border:none;
+    cursor: pointer;
 }
 
 .delete-button{
@@ -135,4 +151,116 @@ body{
     line-height: 24px;
     color:#FFFFFF;
     border:none;
+    cursor:pointer;
+}
+
+/* add comment style */
+.text-area{
+    background-color: #FFFFFF;
+    padding: 16px 16px 13px;
+}
+
+.send-message{
+    height: 96px;
+    width: 311px;
+    border-radius: 8px;
+    border:1px solid #E9EBF0;
+    margin-bottom:16px;
+    resize: none;
+    padding:12px 24px 16px;
+    font-family: 'Rubik';
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+    color:#334253;
+}
+
+.send-message::placeholder{
+    font-family: 'Rubik';
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+    text-align: left;
+    color:#67727E;
+}
+
+.text-area-footer{
+    display: flex;
+    align-items: center;
+    gap: 175px;
+}
+
+.send-button{
+    height: 48px;
+    width: 104px;
+    border-radius: 8px;
+    background-color: #5357B6;
+    font-family: "rubik";
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+    color:#FFFFFF;
+    border:none;
+    cursor: pointer;
+}
+/* you delete edit styles */
+
+.you-text{
+    height: 19px;
+    width: 36px;
+    border-radius: 2px;
+    background-color: #5357B6;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 15px;
+    letter-spacing: 0px;
+    padding: 2px 6px;
+    text-align: center;
+    color:#ffffff;
+}
+
+.recycle-bin{
+    font-family: 'Rubik';
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+    color:#ED6368;
+    border:none;
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.edit-button{
+    font-family: 'Rubik';
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+    color:#5357B6;
+    border:none;
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+/* my text */
+.you-julius{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.you-message-footer{
+    display: flex;
+    align-items: center;
+    gap: 52px;
+}
+
+.recycle-edit-buttons{
+    display: flex;
+    gap: 16px;
 }
