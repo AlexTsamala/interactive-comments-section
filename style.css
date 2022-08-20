@@ -158,6 +158,7 @@ body{
 .text-area{
     background-color: #FFFFFF;
     padding: 16px 16px 13px;
+    border-radius: 8px;
 }
 
 .send-message{
@@ -263,4 +264,45 @@ body{
 .recycle-edit-buttons{
     display: flex;
     gap: 16px;
+}
+
+/* comments style */
+.message-main-container{
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
+}
+
+.message-reply-section{
+    background-color: #FFFFFF;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 16px;
+    border-radius: 8px;
+}
+
+.reply-main-container{
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+}
+
+.reply-container{
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.reply-line{
+    background-color:#E9EBF0;
+    width:2px;
+    border: none;
+}
+
+.message-reply-footer{
+    display: flex;
+    align-items: center;
+    gap: 127px;
 }
