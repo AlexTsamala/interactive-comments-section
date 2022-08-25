@@ -53,6 +53,9 @@ body{
     max-width: 311px;
     text-align: left;
     color:#67727E;
+    word-break: break-all;
+    overflow-y: auto; 
+    max-height: 120px;
 }
 
 .message-footer{
@@ -89,6 +92,17 @@ body{
     cursor: pointer;
 }
 
+.my-new-message{
+    background-color: #FFFFFF;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 16px;
+    border-radius: 8px;
+    min-height: 224px;
+    min-width: 345px;
+}
+
 .reply-img-style{
     padding-top:3px;
 }
@@ -96,14 +110,9 @@ body{
 /* delete div style */
 
 .delete-section-style{
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
     padding: 24px 28px;
     background-color: #FFFFFF;
-    position: absolute;
-    top: 33%;
-    display: none;
+    border-radius: 8px;
 }
 
 .delete-text-style{
@@ -116,7 +125,9 @@ body{
 }
 
 .description{
-    max-width:288px;
+    max-width: 288px;
+    padding-top: 16px;
+    padding-bottom: 16px;
 }
 
 .buttons-section{
@@ -259,6 +270,7 @@ body{
     display: flex;
     align-items: center;
     gap: 52px;
+    margin-top: auto;
 }
 
 .recycle-edit-buttons{
@@ -305,4 +317,16 @@ body{
     display: flex;
     align-items: center;
     gap: 127px;
+}
+
+.cover-div{
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+    top: 0;
+    left: 0;
+    align-items: center;
+    justify-content: center;
 }
