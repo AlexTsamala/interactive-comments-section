@@ -37,7 +37,7 @@ function structureForJson(text,time,score,picture,name){
         "score": score,
         "user": {
           "image": { 
-            "png": "${picture}",
+            "png": picture,
             "webp": "./assets/image-amyrobson.webp"
           },
           "username": name
@@ -70,7 +70,47 @@ function replyMarkup(picture,name,time,text,score){
         </div>
     </div>`
 };
-   
+
+function MyReplyMessage(picture,name,time,text,score){
+    return `
+        <div id=${idNumber} class="message-header">
+            <img alt = "${name}" class="picture-styles" src=${picture}>
+            <div class="you-julius">
+                <h1 class="Name-styles">${name}</h1>
+                <div class="you-text">
+                    <span>you</span>
+                </div>
+                </div>
+                <span class="text-style">${time}</span>
+            </div>
+        <p class="text-style">${text}</p>
+        <div class="reply-message-footer">
+            <div class="plus-minus-style"> 
+                <img onclick="plusScore(event)" alt="plus" class="plus-minus-icons" src="./assets/icon-plus.svg" />
+                <span class='score'>${score}</span>
+                <img onclick="minusScore(event)" alt="minus" class="plus-minus-icons" src="./assets/icon-minus.svg" />
+            </div>
+            <div class="recycle-edit-buttons">
+                <div class="edit-delete-style">
+                    <button onclick="deleteIconOfReply(event)" type="button" class="recycle-bin">
+                        <img alt="recycle-bin" src="./assets/icon-delete.svg"/>
+                    </button>
+                    <button onclick="deleteIconOfReply(event)" type="button" class="recycle-bin">
+                        <span>Delete</span>
+                    </button>
+                </div>    
+                <div class="edit-delete-style">
+                    <button onclick="EditMyReplyText(event)" type="button" class="edit-button">
+                        <img alt="edit" src="./assets/icon-edit.svg"/>
+                    </button>
+                    <button onclick="EditMyReplyText(event)" type="button" class="edit-button">
+                        <span >Edit</span>
+                    </button>
+                </div>
+            </div>
+        </div>`
+};
+
 function MyMessage(picture,name,time,text,score){
     return `
         <div id=${idNumber} class="message-header">
@@ -83,24 +123,31 @@ function MyMessage(picture,name,time,text,score){
                 </div>
                 <span class="text-style">${time}</span>
             </div>
-        <p id="messageTextElement" class="text-style">${text}</p>
-        <div class="you-message-footer">
+        <p class="text-style">${text}</p>
+        <div class="my-message-footer">
             <div class="plus-minus-style"> 
                 <img onclick="plusScore(event)" alt="plus" class="plus-minus-icons" src="./assets/icon-plus.svg" />
                 <span class='score'>${score}</span>
                 <img onclick="minusScore(event)" alt="minus" class="plus-minus-icons" src="./assets/icon-minus.svg" />
             </div>
             <div class="recycle-edit-buttons">
-                <button onclick="deleteIcon(event)" type="button" class="recycle-bin">
-                    <img alt="recycle-bin" src="./assets/icon-delete.svg"/>
-                    <span>Delete</span>
-                </button>
-                <button type="button" class="edit-button">
-                    <img alt="recycle-bin" src="./assets/icon-edit.svg"/>
-                    <span onclick="editText(event)">Edit</span>
-                </button>
-            </div>
-        </div>`
+                <div class="edit-delete-style">
+                    <button onclick="deleteIcon(event)" type="button" class="recycle-bin">
+                        <img alt="recycle-bin" src="./assets/icon-delete.svg"/>
+                    </button>
+                    <button onclick="deleteIcon(event)" type="button" class="recycle-bin">
+                        <span>Delete</span>
+                    </button>
+                </div>    
+                <div class="edit-delete-style">
+                    <button onclick="EditMyText(event)" type="button" class="edit-button">
+                        <img alt="edit" src="./assets/icon-edit.svg"/>
+                    </button>
+                    <button onclick="EditMyText(event)" type="button" class="edit-button">
+                        <span >Edit</span>
+                    </button>
+                </div>
+            </div>`
 };
 
 
@@ -120,6 +167,18 @@ const DeleteSection =`<div class="cover-div" id="delete-section-style" >
             <div class="buttons-section">
                 <button onclick="closeDeleteSection()" class="cancel-button" type="button">NO, CANCEL</button>
                 <button onclick="deleteMessage()" class="delete-button" type="button">YES, DELETE</button>
+        </div>
+    <div/>    
+</div>`
+const DeleteSectionReply =`<div class="cover-div-reply" id="delete-section-reply" >
+        <div class="delete-section-style" >
+            <h2 class="delete-text-style">Delete comment</h2>
+            <p class="text-style description">
+                Are you sure you want to delete this comment? This will remove the comment and can’t be undone.
+            </p>
+            <div class="buttons-section">
+                <button onclick="closeDeleteSectionReply()" class="cancel-button" type="button">NO, CANCEL</button>
+                <button onclick="deleteMessageReply()" class="delete-button" type="button">YES, DELETE</button>
         </div>
     <div/>    
 </div>`
@@ -158,7 +217,7 @@ window.sendText=()=>{
     }
 }
 
-// delete function
+// delete function for my message
 let clickedMessage;
 window.deleteIcon=(event)=>{
     let deleteDiv = document.getElementById("delete-section-style");
@@ -177,35 +236,128 @@ window.deleteMessage=()=>{
     let deleteDiv = document.getElementById("delete-section-style");
     deleteDiv.style.display="none";
     body.style.overflow ="auto";
-    let mainMessageMother = clickedMessage.parentNode.parentNode.parentNode.parentNode;
+    let mainMessageMother = clickedMessage.parentElement.parentElement.parentElement.parentElement.parentElement;
     let messageId = mainMessageMother.firstElementChild.id;
-    let replyMother =mainMessageMother.parentNode.parentNode.previousElementSibling.id;
     mainMessageMother.remove();
-    if(replyMother===""){
-        let messageDataIndex = data.comments.findIndex((element) =>element.id==messageId);
-        data.comments.splice(messageDataIndex,1);
-    }else{
-        let replyMotherElement = data.comments.find((element) => element.id==replyMother);
-        let replyMessageIndex = replyMotherElement.replies.findIndex((element) => element.id== messageId);
-        replyMotherElement.replies.splice(replyMessageIndex,1);
-    }
+    let messageDataIndex = data.comments.findIndex((element) => element.id==messageId);
+    data.comments.splice(messageDataIndex,1);
 }
 
-// edit function
+// delete function for my message reply
+let clickedMessageReply;
+window.deleteIconOfReply=(event)=>{
+    let deleteDiv = document.getElementById("delete-section-reply");
+    deleteDiv.style.display="flex";
+    body.style.overflow ="hidden";
+    clickedMessageReply=event.target;
+}
 
-window.editText=(event)=>{
-    let messageTextElement = event.target.parentNode.parentNode.parentNode.previousElementSibling;
+window.closeDeleteSectionReply=()=>{
+    let deleteDiv = document.getElementById("delete-section-reply");
+    deleteDiv.style.display="none";
+    body.style.overflow ="auto";
+}
+
+window.deleteMessageReply=()=>{
+    let deleteDiv = document.getElementById("delete-section-reply");
+    deleteDiv.style.display="none";
+    body.style.overflow ="auto";
+    let mainMessageMother = clickedMessageReply.parentElement.parentElement.parentElement.parentElement.parentElement;
+    let messageId = mainMessageMother.firstElementChild.id;
+    let replyMother = mainMessageMother.parentElement.parentElement.previousElementSibling.id;
+    mainMessageMother.remove();
+    let replyMotherElement = data.comments.find((element) => element.id==replyMother);
+    let replyMessageIndex = replyMotherElement.replies.findIndex((element) => element.id== messageId);
+    replyMotherElement.replies.splice(replyMessageIndex,1);
+}
+
+// edit function for my message
+window.EditMyText=(event)=>{
+    let messageTextElement = event.target.parentElement.parentElement.parentElement.parentElement.previousElementSibling;
     let messageArea = document.createElement("textarea");
-    console.log(event.target.parentNode.parentNode.parentNode.previousElementSibling)
     messageArea.classList="send-message";
     messageArea.setAttribute("rows","4");
     messageArea.setAttribute("cols","50");
     messageArea.value=messageTextElement.textContent;
-    messageTextElement.parentNode.replaceChild(messageArea,messageTextElement)
-
+    messageTextElement.parentElement.replaceChild(messageArea,messageTextElement);
+    let updateButton = document.createElement("button");
+    updateButton.classList="update-button-style";
+    updateButton.textContent="UPDATE";
+    let deleteRecycleMotherDiv = event.target.parentElement.parentElement.parentElement;
+    deleteRecycleMotherDiv.appendChild(updateButton);
+    let editText = event.target.parentElement;
+    let editImg = event.target.parentElement.previousElementSibling;
+    let deleteText = event.target.parentElement.parentElement.previousElementSibling.firstElementChild;
+    let deleteImg = event.target.parentElement.parentElement.previousElementSibling.firstElementChild.nextElementSibling;      
+    if(event.target.tagName==="IMG"){
+         editText = event.target.parentElement.nextElementSibling;
+         editImg = event.target.parentElement;
+    }
+    editText.style.display ="none";
+    editImg .style.display ="none";
+    deleteText .style.display ="none";
+    deleteImg .style.display ="none";
+    updateButton.addEventListener("click",(event)=>{
+        event.target.style.display = "none";
+        editText.style.display ="block";
+        editImg .style.display ="block";
+        deleteText .style.display ="block";
+        deleteImg .style.display ="block";
+        let newParagraph = document.createElement("p");
+        newParagraph.classList="text-style";
+        newParagraph.textContent=messageArea.value;
+        messageArea.parentElement.replaceChild(newParagraph,messageArea);
+        let indexOfSection = event.target.parentElement.parentElement.parentElement.firstElementChild.id;
+        let addressOfSectionInData = data.comments.find((element) => element.id==indexOfSection);
+        addressOfSectionInData.content=newParagraph.textContent;
+    })
+}
+// edit function for my message REPLY
+window.EditMyReplyText=(event)=>{
+   let messageTextElement = event.target.parentElement.parentElement.parentElement.parentElement.previousElementSibling;
+    let messageArea = document.createElement("textarea");
+    messageArea.classList="send-message";
+    messageArea.setAttribute("rows","4");
+    messageArea.setAttribute("cols","50");
+    messageArea.value=messageTextElement.textContent;
+    messageTextElement.parentElement.replaceChild(messageArea,messageTextElement);
+    let updateButton = document.createElement("button");
+    updateButton.classList="update-button-style";
+    updateButton.textContent="UPDATE";
+    let deleteRecycleMotherDiv = event.target.parentElement.parentElement.parentElement;
+    deleteRecycleMotherDiv.appendChild(updateButton);
+    let editText = event.target.parentElement;
+    let editImg = event.target.parentElement.previousElementSibling;
+    let deleteText = event.target.parentElement.parentElement.previousElementSibling.firstElementChild;
+    let deleteImg = event.target.parentElement.parentElement.previousElementSibling.firstElementChild.nextElementSibling;      
+    if(event.target.tagName==="IMG"){
+         editText = event.target.parentElement.nextElementSibling;
+         editImg = event.target.parentElement;
+    }
+    editText.style.display ="none";
+    editImg .style.display ="none";
+    deleteText .style.display ="none";
+    deleteImg .style.display ="none";
+    updateButton.addEventListener("click",(event)=>{
+        event.target.style.display = "none";
+        editText.style.display ="block";
+        editImg .style.display ="block";
+        deleteText .style.display ="block";
+        deleteImg .style.display ="block";
+        let newParagraph = document.createElement("p");
+        newParagraph.classList="text-style";
+        newParagraph.textContent=messageArea.value;
+        messageArea.parentElement.replaceChild(newParagraph,messageArea);
+        let indexOfSectionParent = event.target.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.firstElementChild.id;
+        let indexOfSection = event.target.parentElement.parentElement.parentElement.firstElementChild.id;
+        let addressOfParentInData = data.comments.find((element) => element.id==indexOfSectionParent);
+        let addressOfSectionInData = addressOfParentInData.replies.findIndex((element) => element.id==indexOfSection);
+        addressOfParentInData.replies[addressOfSectionInData].content=newParagraph.textContent;
+    })
 }
 
 mainContainer.innerHTML += DeleteSection;
+mainContainer.innerHTML += DeleteSectionReply;
 let MessageMainContainerOne = document.createElement('div');
 MessageMainContainerOne.classList="message-main-container";
 let MessageMainContainerTwo = document.createElement('div');
@@ -241,9 +393,9 @@ for (let i = 0; i < data.comments[1].replies.length; i++){
     if(i===0){
         replyContainer.innerHTML += replyMarkup(Picture,Name,TextTime,Text,Score);
     }else{
-        let newMessage =MyMessage(Picture,Name,TextTime,Text,Score);
+        let newMessage =MyReplyMessage(Picture,Name,TextTime,Text,Score);
         let MessageMainContainer = document.createElement('div');
-        MessageMainContainer.classList="my-new-message";
+        MessageMainContainer.classList="my-reply-message";
         MessageMainContainer.innerHTML=newMessage;
         replyContainer.appendChild(MessageMainContainer);
     }
