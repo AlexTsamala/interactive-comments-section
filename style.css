@@ -381,3 +381,45 @@ body{
     display: flex;
     gap: 8px;
 }
+/* reply new window styles */
+.new-reply-window{
+    background-color: #FFFFFF;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 16px;
+    border-radius: 8px;
+    min-height: 190px;
+    width: 343px;
+}
+
+.new-reply-window-second{
+    background-color: #FFFFFF;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 16px;
+    border-radius: 8px;
+    min-height: 190px;
+    width: 325px;
+}
+
+.new-reply-message-style{
+    height: 96px;
+    width: 294px;
+    border-radius: 8px;
+    border: 1px solid #E9EBF0;
+    resize: none;
+    font-family: 'Rubik';
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+    color: #334253;
+    padding: 12px 24px 16px;
+}
+
+.new-reply-footer{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}

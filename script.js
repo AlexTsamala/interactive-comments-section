@@ -22,8 +22,12 @@ function markup(id,picture,name,time,text,score){
                 <img onclick="minusScore(event)" alt="minus" class="plus-minus-icons minus" src="./assets/icon-minus.svg" />
             </div>
             <div class="reply-section">
-                <img class="reply-img-style" alt="reply" src="./assets/icon-reply.svg"/>
-                <span>Reply</span>
+                <button onclick="openReplySection(event)" class="edit-button" type="button">
+                    <img class="reply-img-style" alt="reply" src="./assets/icon-reply.svg"/>
+                </button>
+                <button onclick="openReplySection(event)" class="edit-button" type="button">
+                    <span>Reply</span>
+                </button>
             </div>
         </div>
     </div>`
@@ -64,8 +68,12 @@ function replyMarkup(picture,name,time,text,score){
                 <img onclick="minusScore(event)" alt="minus" class="plus-minus-icons" src="./assets/icon-minus.svg" />
             </div>
             <div class="reply-section">
-                <img class="reply-img-style" alt="reply" src="./assets/icon-reply.svg"/>
-                <span>Reply</span>
+                <button onclick="RepliedMessagesReplySection(event)" class="edit-button" type="button">
+                    <img class="reply-img-style" alt="reply" src="./assets/icon-reply.svg"/>
+                </button>
+                <button onclick="RepliedMessagesReplySection(event)" class="edit-button" type="button">
+                    <span>Reply</span>
+                </button>
             </div>
         </div>
     </div>`
@@ -158,6 +166,14 @@ const MessageKeyboard = `<form class="text-area" id="text-area">
     <button onclick="sendText()"  class="send-button" type="button">SEND</button>
 </div>
 </form>`;
+
+const newReplyMessageSection=`
+    <textarea id="message-area"  class="new-reply-message-style"  rows="4" cols="50" placeholder="Add a comment…"></textarea>
+    <div class="new-reply-footer">
+        <img class="picture-styles" alt="image-juliusomo" src="./assets/image-juliusomo.png"/>
+        <button class="send-button" type="button">REPLY</button>
+    </div>`
+
 const DeleteSection =`<div class="cover-div" id="delete-section-style" >
         <div class="delete-section-style" >
             <h2 class="delete-text-style">Delete comment</h2>
@@ -183,6 +199,35 @@ const DeleteSectionReply =`<div class="cover-div-reply" id="delete-section-reply
     <div/>    
 </div>`
 
+// reply button functions
+
+window.openReplySection=(event)=>{
+    let clickedDivNextElement = event.target.parentElement.parentElement.parentElement.parentElement.parentElement.nextElementSibling;
+    let clickedDivNextElementReply = event.target.parentElement.parentElement.parentElement.parentElement.nextElementSibling;
+    let replySectionParent = document.createElement("div");
+    replySectionParent.classList="new-reply-window";
+    replySectionParent.innerHTML = newReplyMessageSection;
+    if(clickedDivNextElement.tagName==="DIV"){
+        mainContainer.insertBefore(replySectionParent,clickedDivNextElement);
+    }else{
+        let parentOfClickedTarget = event.target.parentElement.parentElement.parentElement.parentElement.parentElement; 
+        parentOfClickedTarget.insertBefore(replySectionParent,clickedDivNextElementReply);
+    }
+}
+
+window.RepliedMessagesReplySection=(event)=>{
+    let parentOfClickedTarget = event.target.parentElement.parentElement.parentElement.parentElement.parentElement;
+    let clickedDivNextElement = event.target.parentElement.parentElement.parentElement.parentElement.nextElementSibling;
+    let replySectionParent = document.createElement("div");
+    replySectionParent.classList="new-reply-window-second";
+    replySectionParent.innerHTML = newReplyMessageSection;
+    if(clickedDivNextElement!=null){
+        parentOfClickedTarget.insertBefore(replySectionParent,clickedDivNextElement);
+    }else{
+        console.log()
+    }
+
+}
 // score functions
 
 window.minusScore=(event)=>{
@@ -273,6 +318,8 @@ window.deleteMessageReply=()=>{
 
 // edit function for my message
 window.EditMyText=(event)=>{
+    let closeButton = document.getElementById("updateButton").style.display="none";
+    console.log(closeButton)
     let messageTextElement = event.target.parentElement.parentElement.parentElement.parentElement.previousElementSibling;
     let messageArea = document.createElement("textarea");
     messageArea.classList="send-message";
@@ -282,6 +329,7 @@ window.EditMyText=(event)=>{
     messageTextElement.parentElement.replaceChild(messageArea,messageTextElement);
     let updateButton = document.createElement("button");
     updateButton.classList="update-button-style";
+    updateButton.setAttribute("id","updateButton");
     updateButton.textContent="UPDATE";
     let deleteRecycleMotherDiv = event.target.parentElement.parentElement.parentElement;
     deleteRecycleMotherDiv.appendChild(updateButton);
