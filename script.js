@@ -3,18 +3,21 @@ const mainContainer = document.getElementById("main-container");
 const replyMainContainer = document.createElement("div");
 const body = document.getElementById("body");
 let idNumber = 4;
+let replyNUmber = 0;
 // functions of markup
 function markup(id,picture,name,time,text,score){ 
     return`
     <div id=${id} class="message-section">
-        <div class="message-header">
-            <img alt = ${name} class="picture-styles" src=${picture}>
-            <h1 class="Name-styles">${name}</h1>
-            <span class="text-style">${time}</span>
-        </div>
-        <p class="text-style">
-            ${text}
-        </p>
+        <div>
+            <div class="message-header">
+                <img alt = ${name} class="picture-styles" src=${picture}>
+                <h1 class="Name-styles">${name}</h1>
+                <span class="text-style">${time}</span>
+            </div>
+            <p class="text-style">
+                ${text}
+            </p>
+        </div>    
         <div class="message-footer">
             <div class="plus-minus-style"> 
                 <img onclick="plusScore(event)"  alt="plus" class="plus-minus-icons plus" src="./assets/icon-plus.svg" />
@@ -22,10 +25,10 @@ function markup(id,picture,name,time,text,score){
                 <img onclick="minusScore(event)" alt="minus" class="plus-minus-icons minus" src="./assets/icon-minus.svg" />
             </div>
             <div class="reply-section">
-                <button onclick="openReplySection(event)" class="edit-button" type="button">
+                <button onclick="openReplySection(event,${id})" class="edit-button" type="button">
                     <img class="reply-img-style" alt="reply" src="./assets/icon-reply.svg"/>
                 </button>
-                <button onclick="openReplySection(event)" class="edit-button" type="button">
+                <button onclick="openReplySection(event,${id})" class="edit-button" type="button">
                     <span>Reply</span>
                 </button>
             </div>
@@ -50,17 +53,17 @@ function structureForJson(text,time,score,picture,name){
     }
 }
 
-function replyMarkup(picture,name,time,text,score){
+function replyMarkup(id,picture,name,time,replyingTo,text,score){
     return`
-    <div class="message-reply-section">
-        <div class="message-header">
-            <img alt = ${name} class="picture-styles" src=${picture}>
-            <h1 class="Name-styles">${name}</h1>
-            <span class="text-style">${time}</span>
-        </div>
-        <p class="text-style">
-            ${text}
-        </p>
+    <div id=${id} class="message-reply-section">
+            <div class="message-header">
+                <img alt = ${name} class="picture-styles" src=${picture}>
+                <h1 class="Name-styles">${name}</h1>
+                <span class="text-style">${time}</span>
+            </div>
+            <p class="text-style">
+            <span class="replying-to">@${replyingTo}</span> ${text}
+            </p>
         <div class="message-reply-footer">
             <div class="plus-minus-style"> 
                 <img onclick="plusScore(event)"  alt="plus" class="plus-minus-icons" src="./assets/icon-plus.svg" />
@@ -79,7 +82,7 @@ function replyMarkup(picture,name,time,text,score){
     </div>`
 };
 
-function MyReplyMessage(picture,name,time,text,score){
+function MyReplyMessage(picture,name,time,replyingTo,text,score){
     return `
         <div id=${idNumber} class="message-header">
             <img alt = "${name}" class="picture-styles" src=${picture}>
@@ -91,7 +94,8 @@ function MyReplyMessage(picture,name,time,text,score){
                 </div>
                 <span class="text-style">${time}</span>
             </div>
-        <p class="text-style">${text}</p>
+        <p class="text-style"><span class="replying-to">@${replyingTo}</span> ${text}
+        </p>
         <div class="reply-message-footer">
             <div class="plus-minus-style"> 
                 <img onclick="plusScore(event)" alt="plus" class="plus-minus-icons" src="./assets/icon-plus.svg" />
@@ -131,7 +135,7 @@ function MyMessage(picture,name,time,text,score){
                 </div>
                 <span class="text-style">${time}</span>
             </div>
-        <p class="text-style">${text}</p>
+        <p class="my-message-style">${text}</p>
         <div class="my-message-footer">
             <div class="plus-minus-style"> 
                 <img onclick="plusScore(event)" alt="plus" class="plus-minus-icons" src="./assets/icon-plus.svg" />
@@ -171,7 +175,7 @@ const newReplyMessageSection=`
     <textarea id="message-area"  class="new-reply-message-style"  rows="4" cols="50" placeholder="Add a comment…"></textarea>
     <div class="new-reply-footer">
         <img class="picture-styles" alt="image-juliusomo" src="./assets/image-juliusomo.png"/>
-        <button class="send-button" type="button">REPLY</button>
+        <button onclick="replyButton(event)" class="send-button" type="button">REPLY</button>
     </div>`
 
 const DeleteSection =`<div class="cover-div" id="delete-section-style" >
@@ -200,33 +204,101 @@ const DeleteSectionReply =`<div class="cover-div-reply" id="delete-section-reply
 </div>`
 
 // reply button functions
-
-window.openReplySection=(event)=>{
-    let clickedDivNextElement = event.target.parentElement.parentElement.parentElement.parentElement.parentElement.nextElementSibling;
-    let clickedDivNextElementReply = event.target.parentElement.parentElement.parentElement.parentElement.nextElementSibling;
-    let replySectionParent = document.createElement("div");
-    replySectionParent.classList="new-reply-window";
-    replySectionParent.innerHTML = newReplyMessageSection;
-    if(clickedDivNextElement.tagName==="DIV"){
-        mainContainer.insertBefore(replySectionParent,clickedDivNextElement);
-    }else{
-        let parentOfClickedTarget = event.target.parentElement.parentElement.parentElement.parentElement.parentElement; 
-        parentOfClickedTarget.insertBefore(replySectionParent,clickedDivNextElementReply);
-    }
+window.openReplySection=(event,id)=>{
+    let replyMotherElement = data.comments.find((element) => element.id == id);
+        if(replyMotherElement.clickedOnReply!=true){
+            if(event.target.tagName==="IMG"){
+                event.target.style.transform = "rotate(-90deg)";
+            }else{
+                event.target.parentElement.previousElementSibling.firstElementChild.style.transform = "rotate(-90deg)"
+            }
+            let clickedDivParent = event.target.parentElement.parentElement.parentElement.parentElement.parentElement;
+            let clickedDivNextElement = event.target.parentElement.parentElement.parentElement.parentElement.nextElementSibling
+            let replySectionParent = document.createElement("div");
+            replySectionParent.classList="new-reply-window";
+            replySectionParent.innerHTML = newReplyMessageSection;
+            if(clickedDivNextElement===null){
+                clickedDivParent.appendChild(replySectionParent);
+            }else{
+                let parentOfClickedTarget = event.target.parentElement.parentElement.parentElement.parentElement.parentElement;
+                parentOfClickedTarget.insertBefore(replySectionParent,clickedDivNextElement);
+            }
+            replyMotherElement.clickedOnReply=true;
+        }else{
+            let replySection = event.target.parentElement.parentElement.parentElement.parentElement.nextElementSibling;
+            replySection.remove();
+            if(event.target.tagName==="IMG"){
+                event.target.style.transform = "rotate(0deg)";
+            }else{
+            event.target.parentElement.previousElementSibling.firstElementChild.style.transform = "rotate(0deg)"
+            }
+            replyMotherElement.clickedOnReply=false;
+        }
+    
 }
-
+let clickedOnReplyMessage=true;
 window.RepliedMessagesReplySection=(event)=>{
     let parentOfClickedTarget = event.target.parentElement.parentElement.parentElement.parentElement.parentElement;
-    let clickedDivNextElement = event.target.parentElement.parentElement.parentElement.parentElement.nextElementSibling;
-    let replySectionParent = document.createElement("div");
-    replySectionParent.classList="new-reply-window-second";
-    replySectionParent.innerHTML = newReplyMessageSection;
-    if(clickedDivNextElement!=null){
-        parentOfClickedTarget.insertBefore(replySectionParent,clickedDivNextElement);
+    if(clickedOnReplyMessage){
+        if(event.target.tagName==="IMG"){
+            event.target.style.transform = "rotate(-90deg)";
+        }else{
+            event.target.parentElement.previousElementSibling.firstElementChild.style.transform = "rotate(-90deg)"
+        }
+        let clickedDivNextElement = event.target.parentElement.parentElement.parentElement.parentElement.nextElementSibling;
+        let replySectionParent = document.createElement("div");
+        replySectionParent.classList="new-reply-window-second";
+        replySectionParent.innerHTML = newReplyMessageSection;
+        if(clickedDivNextElement!=null){
+            parentOfClickedTarget.insertBefore(replySectionParent,clickedDivNextElement);
+        }else{
+            parentOfClickedTarget.appendChild(replySectionParent);
+        }
+        
+        clickedOnReplyMessage=false;
     }else{
-        console.log()
+        clickedOnReplyMessage=true;
+        const replySection = event.target.parentElement.parentElement.parentElement.parentElement.nextElementSibling;
+        replySection.remove();
+        if(event.target.tagName==="IMG"){
+            event.target.style.transform = "rotate(0deg)";
+        }else{
+            event.target.parentElement.previousElementSibling.firstElementChild.style.transform = "rotate(0deg)"
+        }
     }
-
+}
+window.replyButton=(event)=>{
+    let replyButtonsParentsParentId = event.target.parentElement.parentElement.previousElementSibling.id;
+    let replyButtonsParentsParent = event.target.parentElement.parentElement.parentElement;
+    let replyButtonsParent = event.target.parentElement.parentElement;
+    let replyImg = event.target.parentElement.parentElement.previousElementSibling.lastElementChild.lastElementChild.firstElementChild.firstElementChild;
+    let replyingTo ; 
+    if(replyButtonsParentsParentId<3){
+        let messageDataIndex = data.comments.find((element) => element.id==replyButtonsParentsParentId);
+        replyingTo = messageDataIndex.user.username;
+    }else{
+        let messageDataIndex = data.comments[1].replies.find((element) => element.id==replyButtonsParentsParentId);
+        replyingTo = messageDataIndex.user.username;
+    }
+    const picture = data.currentUser.image.png;
+    const name = data.currentUser.username;
+    const time ="Just now";
+    const score = 0;
+    const replyMessage=event.target.parentElement.previousElementSibling.value;
+    let clickedDivNextElement = event.target.parentElement.parentElement.nextElementSibling;
+    let replySection = MyReplyMessage(picture,name,time,replyingTo,replyMessage,score);
+    let MessageMainContainer = document.createElement('div');
+    MessageMainContainer.classList="my-reply-message";
+    MessageMainContainer.innerHTML=replySection;
+    if(clickedDivNextElement!=null){
+        replyButtonsParentsParent.insertBefore(MessageMainContainer,clickedDivNextElement);
+        console.log("hi")
+    }else{
+        replyButtonsParentsParent.appendChild(MessageMainContainer);
+        console.log("hi")
+    }
+    replyImg.style.transform = "rotate(0deg)";
+    replyButtonsParent.remove();
 }
 // score functions
 
@@ -245,7 +317,7 @@ window.sendText=()=>{
     idNumber++;
     const picture = data.currentUser.image.png;
     const name = data.currentUser.username;
-    const textTime = "2 days ago";
+    const textTime = "Just now";
     const score = 0; 
     const messageArea = document.getElementById("message-area").value;
     const trimMessageArea = messageArea.trim();
@@ -311,15 +383,14 @@ window.deleteMessageReply=()=>{
     let messageId = mainMessageMother.firstElementChild.id;
     let replyMother = mainMessageMother.parentElement.parentElement.previousElementSibling.id;
     mainMessageMother.remove();
-    let replyMotherElement = data.comments.find((element) => element.id==replyMother);
-    let replyMessageIndex = replyMotherElement.replies.findIndex((element) => element.id== messageId);
+    let replyMotherElement = data.comments.find((element) => element.id == replyMother);
+    let replyMessageIndex = replyMotherElement.replies.findIndex((element) => element.id == messageId);
     replyMotherElement.replies.splice(replyMessageIndex,1);
 }
 
 // edit function for my message
 window.EditMyText=(event)=>{
-    let closeButton = document.getElementById("updateButton").style.display="none";
-    console.log(closeButton)
+    
     let messageTextElement = event.target.parentElement.parentElement.parentElement.parentElement.previousElementSibling;
     let messageArea = document.createElement("textarea");
     messageArea.classList="send-message";
@@ -436,12 +507,13 @@ for (let i = 0; i < data.comments[1].replies.length; i++){
     const Picture = data.comments[1].replies[i].user.image.png;
     const Name = data.comments[1].replies[i].user.username;
     const TextTime = data.comments[1].replies[i].createdAt;
+    const replyingTo = data.comments[1].replies[i].replyingTo;
     const Text = data.comments[1].replies[i].content;
-    const Score = data.comments[1].replies[i].score;    
+    const Score = data.comments[1].replies[i].score; 
     if(i===0){
-        replyContainer.innerHTML += replyMarkup(Picture,Name,TextTime,Text,Score);
+        replyContainer.innerHTML += replyMarkup(3,Picture,Name,TextTime,replyingTo,Text,Score);
     }else{
-        let newMessage =MyReplyMessage(Picture,Name,TextTime,Text,Score);
+        let newMessage =MyReplyMessage(Picture,Name,TextTime,replyingTo,Text,Score);
         let MessageMainContainer = document.createElement('div');
         MessageMainContainer.classList="my-reply-message";
         MessageMainContainer.innerHTML=newMessage;
