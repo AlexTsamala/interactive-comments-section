@@ -1,6 +1,5 @@
 import data from './data.json' assert { type: 'json' }; 
 const mainContainer = document.getElementById("main-container");
-const replyMainContainer = document.createElement("div");
 const body = document.getElementById("body");
 let idNumber = 4;
 let replyNUmber = 0;
@@ -36,12 +35,13 @@ function markup(id,picture,name,time,text,score){
     </div>`
 };
 
-function structureForJson(text,time,score,picture,name){
+function structureForJson(text,time,score,picture,name,replyingTo){
     return{
         "id": idNumber,
         "content":text,
         "createdAt": time,
         "score": score,
+        "replyingTo":replyingTo,
         "user": {
           "image": { 
             "png": picture,
@@ -49,7 +49,6 @@ function structureForJson(text,time,score,picture,name){
           },
           "username": name
         },
-        "replies": []
     }
 }
 
@@ -172,7 +171,7 @@ const MessageKeyboard = `<form class="text-area" id="text-area">
 </form>`;
 
 const newReplyMessageSection=`
-    <textarea id="message-area"  class="new-reply-message-style"  rows="4" cols="50" placeholder="Add a comment…"></textarea>
+    <textarea id="message-area-reply"  class="new-reply-message-style"  rows="4" cols="50" placeholder="Add a comment…"></textarea>
     <div class="new-reply-footer">
         <img class="picture-styles" alt="image-juliusomo" src="./assets/image-juliusomo.png"/>
         <button onclick="replyButton(event)" class="send-button" type="button">REPLY</button>
@@ -235,6 +234,8 @@ window.openReplySection=(event,id)=>{
             replyMotherElement.clickedOnReply=false;
         }
     
+    let replyMessageValue = event.target.parentElement.parentElement.parentElement.parentElement.nextElementSibling.children[0].value ="@" + replyMotherElement.user.username;
+    
 }
 let clickedOnReplyMessage=true;
 window.RepliedMessagesReplySection=(event)=>{
@@ -266,8 +267,10 @@ window.RepliedMessagesReplySection=(event)=>{
             event.target.parentElement.previousElementSibling.firstElementChild.style.transform = "rotate(0deg)"
         }
     }
+   
 }
 window.replyButton=(event)=>{
+    idNumber++
     let replyButtonsParentsParentId = event.target.parentElement.parentElement.previousElementSibling.id;
     let replyButtonsParentsParent = event.target.parentElement.parentElement.parentElement;
     let replyButtonsParent = event.target.parentElement.parentElement;
@@ -290,15 +293,30 @@ window.replyButton=(event)=>{
     let MessageMainContainer = document.createElement('div');
     MessageMainContainer.classList="my-reply-message";
     MessageMainContainer.innerHTML=replySection;
-    if(clickedDivNextElement!=null){
-        replyButtonsParentsParent.insertBefore(MessageMainContainer,clickedDivNextElement);
-        console.log("hi")
-    }else{
-        replyButtonsParentsParent.appendChild(MessageMainContainer);
-        console.log("hi")
+    if(replyButtonsParentsParentId<3){
+        if(clickedDivNextElement!=null){
+            clickedDivNextElement.children[1].prepend(MessageMainContainer);
+        }else{
+            replyButtonsParentsParent.appendChild(MessageMainContainer);
+        }
+    }
+    if(replyButtonsParentsParentId>2){
+        if(clickedDivNextElement!=null){
+            replyButtonsParentsParent.insertBefore(MessageMainContainer,clickedDivNextElement);
+        }else{
+            replyButtonsParentsParent.appendChild(MessageMainContainer);
+        }
     }
     replyImg.style.transform = "rotate(0deg)";
     replyButtonsParent.remove();
+    clickedOnReplyMessage=true;
+    data.comments[0].clickedOnReply="false";
+    data.comments[1].clickedOnReply="false";
+    let newReplyJsonMessage = structureForJson(replyMessage,time,score,picture,name,replyingTo);
+    if(replyButtonsParentsParentId<3){
+        let messageDataIndex = data.comments.find((element) => element.id==replyButtonsParentsParentId);
+        messageDataIndex.replies.push(newReplyJsonMessage);
+    }
 }
 // score functions
 
@@ -321,13 +339,17 @@ window.sendText=()=>{
     const score = 0; 
     const messageArea = document.getElementById("message-area").value;
     const trimMessageArea = messageArea.trim();
-    let newMessage =MyMessage(picture,name,textTime,trimMessageArea,score);
+    console.log("1")
+    let newMessage = MyMessage(picture,name,textTime,trimMessageArea,score);
+    console.log("2")
     const textArea = document.getElementById("text-area");
     let MessageMainContainer = document.createElement('div');
     MessageMainContainer.classList="my-new-message";
     MessageMainContainer.innerHTML=newMessage;
+    console.log(trimMessageArea)
     if(trimMessageArea!=""){
         let structuredNewMessage = structureForJson(trimMessageArea,textTime,score,picture,name)
+        console.log("3")
         mainContainer.insertBefore(MessageMainContainer,textArea);
         document.getElementById("message-area").value="";
         data.comments.push(structuredNewMessage);
@@ -384,6 +406,7 @@ window.deleteMessageReply=()=>{
     let replyMother = mainMessageMother.parentElement.parentElement.previousElementSibling.id;
     mainMessageMother.remove();
     let replyMotherElement = data.comments.find((element) => element.id == replyMother);
+    console.log(replyMother)
     let replyMessageIndex = replyMotherElement.replies.findIndex((element) => element.id == messageId);
     replyMotherElement.replies.splice(replyMessageIndex,1);
 }
@@ -493,6 +516,7 @@ for(let i = 0; i < data.comments.length; i++){
         MessageMainContainerTwo.innerHTML += markup(i+1,Picture,Name,TextTime,Text,Score);
     }
 }
+const replyMainContainer = document.createElement("div");
 replyMainContainer.classList="reply-main-container";
 let line = document.createElement('hr');
 line.classList="reply-line";
@@ -500,6 +524,17 @@ replyMainContainer.appendChild(line)
 let replyContainer = document.createElement('div');
 replyContainer.classList="reply-container";
 replyMainContainer.appendChild(replyContainer);
+
+const replyMainContainer1 = document.createElement("div");
+replyMainContainer1.classList="reply-main-container";
+let line1 = document.createElement('hr');
+line1.classList="reply-line";
+replyMainContainer1.appendChild(line1)
+let replyContainer1 = document.createElement('div');
+replyContainer1.classList="reply-container";
+replyMainContainer1.appendChild(replyContainer1);
+
+MessageMainContainerOne.appendChild(replyMainContainer1);
 MessageMainContainerTwo.appendChild(replyMainContainer);
 mainContainer.appendChild(MessageMainContainerOne);
 mainContainer.appendChild(MessageMainContainerTwo);
