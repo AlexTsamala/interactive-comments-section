@@ -496,7 +496,7 @@ body{
 .send-button-second{
     display: none;
 }
-@media (min-width: 1000px) {
+@media (min-width: 1440px) {
 .reply-main-container{
     gap:80px;
 }

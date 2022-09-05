@@ -322,7 +322,7 @@ window.openReplySection=(event,id)=>{
             replyMotherElement.clickedOnReply=false;
         }
     let replyMessageValue
-    if(width >= 1000){
+    if(width >= 1440){
         replyMessageValue = clickedButtonParent.nextElementSibling.children[1].value = "@" + replyMotherElement.user.username;
     }else{
         replyMessageValue = clickedButtonParent.nextElementSibling.children[1].value = "@" + replyMotherElement.user.username;
@@ -373,14 +373,14 @@ window.replyButton=(event)=>{
     }
     let replyButtonsParentsParent = event.target.parentElement.parentElement.parentElement;
     let replyButtonsParent = event.target.parentElement.parentElement;
-    if(width >= 1000){
+    if(width >= 1440){
         replyButtonsParent = event.target.parentElement;
     }
     let replyImg = whoIReplyingTo.children[2].lastElementChild.firstElementChild.firstElementChild;
-    if(width>=1000 && clickedButtonParentIndexReply<3){
+    if(width>=1440 && clickedButtonParentIndexReply<3){
         replyImg = whoIReplyingTo.children[3].firstElementChild.firstElementChild;
     }
-    if(width>=1000 && clickedButtonParentIndexReply>2){
+    if(width>=1440 && clickedButtonParentIndexReply>2){
         replyImg = whoIReplyingTo.children[1].firstElementChild.lastElementChild.firstElementChild.firstElementChild;
         replyButtonsParentsParent = event.target.parentElement.parentElement;
     }
@@ -397,7 +397,7 @@ window.replyButton=(event)=>{
     const time ="Just now";
     const score = 0;
     let replyMessage = event.target.parentElement.previousElementSibling.value;
-    if(width>1000){
+    if(width>=1440){
         replyMessage = event.target.parentElement.children[1].value;
     }
     let arr = replyMessage.split(" ");
@@ -411,7 +411,7 @@ window.replyButton=(event)=>{
         newArray.push(word);
     }
     let clickedDivNextElement = event.target.parentElement.parentElement.nextElementSibling;
-    if(width >= 1000){
+    if(width >= 1440){
         clickedDivNextElement = event.target.parentElement.parentElement.children[2];
     }
     
@@ -422,7 +422,7 @@ window.replyButton=(event)=>{
     if(replyMessage!=""){
         if(clickedButtonParentIndexReply<3){
             if(clickedDivNextElement!=null){
-                if(width>=1000){
+                if(width>=1440){
                     clickedDivNextElement.children[1].prepend(MessageMainContainer);
                 }else{
                     clickedDivNextElement.children[1].prepend(MessageMainContainer);
@@ -506,7 +506,7 @@ window.deleteMessage=()=>{
     deleteDiv.style.display="none";
     body.style.overflow ="auto";
     let mainMessageMother;
-    if(width>=1000){
+    if(width>=1440){
         mainMessageMother = clickedMessage.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement;
     }else{
         mainMessageMother = clickedMessage.parentElement.parentElement.parentElement.parentElement.parentElement;
@@ -539,7 +539,7 @@ window.deleteMessageReply=()=>{
     deleteDiv.style.display="none";
     body.style.overflow ="auto";
     let mainMessageMother;
-    if(width>=1000){
+    if(width>=1440){
         mainMessageMother = clickedMessageReply.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement;
     }else{
         mainMessageMother = clickedMessageReply.parentElement.parentElement.parentElement.parentElement.parentElement;
@@ -556,7 +556,7 @@ window.deleteMessageReply=()=>{
 window.EditMyText=(event,id)=>{
     let width = screen.width;
     let messageTextElement;
-    if(width>=1000){
+    if(width>=1440){
         messageTextElement = event.target.parentElement.parentElement.parentElement.parentElement.nextElementSibling;
     }else{
         messageTextElement = event.target.parentElement.parentElement.parentElement.parentElement.previousElementSibling.lastElementChild
@@ -616,7 +616,7 @@ window.EditMyText=(event,id)=>{
 window.EditMyReplyText=(event,id)=>{
     let width = screen.width;
     let messageTextElement ;
-    if(width>=1000){
+    if(width>=1440){
         messageTextElement = event.target.parentElement.parentElement.parentElement.parentElement.nextElementSibling;
     }else{
         messageTextElement = event.target.parentElement.parentElement.parentElement.parentElement.previousElementSibling.lastElementChild
